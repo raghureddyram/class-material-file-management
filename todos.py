@@ -71,3 +71,19 @@ class TodoManager(object):
 
         with path.open('w') as fp:
             todos = json.dump(todos, fp, indent=2)
+            
+    def complete(self, task, category=CATEGORY_GENERAL):
+
+        todo_file_name = '{}.json'.format(category)
+        path = self.path / todo_file_name
+
+        if path.exists():
+            with path.open('r') as fp:
+                todos = json.load(fp)
+                
+        for todo in todos["todos"]:
+            if todo['task'] == task:
+                todo["status"] = self.STATUS_DONE
+
+        with path.open('w') as fp:
+            todos = json.dump(todos, fp, indent=2)
